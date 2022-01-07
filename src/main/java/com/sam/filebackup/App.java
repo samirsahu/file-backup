@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class App {
     static List<SyncDir> syncDirs = new ArrayList<>();
-    Logger logger = LogManager.getLogger(this.getClass());
+    static Logger logger = LogManager.getLogger(App.class.getName());
 
     static {
         syncDirs.add(new SyncDir("C:\\Temp\\Sync1-1", "C:\\Temp\\Sync1-2"));
@@ -51,21 +51,22 @@ public class App {
     }
 
     private void printFileInfo(File file) throws IOException {
-        logger.info("Type: " + (file.isDirectory() ? "Directory" : "File"));
-        logger.info("getAbsolutePath: " + file.getAbsolutePath());
-        logger.info("getPath: " + file.getPath());
-        logger.info("getCanonicalPath: " + file.getCanonicalPath());
-        logger.info("getName: " + file.getName());
-        logger.info("getParent: " + file.getParent());
-        logger.info("getFreeSpace: " + file.getFreeSpace());
-        logger.info("getTotalSpace: " + file.getTotalSpace());
-        logger.info("getUsableSpace: " + file.getUsableSpace());
-        logger.info("canExecute: " + file.canExecute());
-        logger.info("canRead: " + file.canRead());
-        logger.info("canWrite: " + file.canWrite());
-        logger.info("isAbsolute: " + file.isAbsolute());
-        logger.info("isHidden: " + file.isHidden());
-        logger.info("exists: " + file.exists());
+        logger.info("*********************************************");
+        logger.info("Type: {}", (file.isDirectory() ? "Directory" : "File"));
+        logger.info("getAbsolutePath: {}", file.getAbsolutePath());
+        logger.info("getPath: {}", file.getPath());
+        logger.info("getCanonicalPath: {}", file.getCanonicalPath());
+        logger.info("getName: {}", file.getName());
+        logger.info("getParent: {}", file.getParent());
+        logger.info("getFreeSpace: {}", file.getFreeSpace());
+        logger.info("getTotalSpace: {}", file.getTotalSpace());
+        logger.info("getUsableSpace: {}", file.getUsableSpace());
+        logger.info("canExecute: {}", file.canExecute());
+        logger.info("canRead: {}", file.canRead());
+        logger.info("canWrite: {}", file.canWrite());
+        logger.info("isAbsolute: {}", file.isAbsolute());
+        logger.info("isHidden: {}", file.isHidden());
+        logger.info("exists: {}", file.exists());
     }
 
 
