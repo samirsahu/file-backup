@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +68,17 @@ public class App {
         logger.info("isAbsolute: {}", file.isAbsolute());
         logger.info("isHidden: {}", file.isHidden());
         logger.info("exists: {}", file.exists());
+
+        logger.info("***** Basic Attributes: -");
+        BasicFileAttributes attributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+        logger.info("isDirectory : {}", attributes.isDirectory());
+        logger.info("isOther : {}", attributes.isOther());
+        logger.info("isRegularFile : {}", attributes.isRegularFile());
+        logger.info("isSymbolicLink : {}", attributes.isSymbolicLink());
+        logger.info("creationTime : {}", attributes.creationTime());
+        logger.info("lastAccessTime : {}", attributes.lastAccessTime());
+        logger.info("lastModifiedTime : {}", attributes.lastModifiedTime());
+        logger.info("size : {}", attributes.size());
     }
 
 
