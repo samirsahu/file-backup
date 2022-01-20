@@ -5,8 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,7 @@ public class App {
     static Logger logger = LogManager.getLogger(App.class.getName());
 
     static {
-        syncDirs.add(new SyncDir("C:\\Temp\\Sync1-1", "C:\\Temp\\Sync1-2"));
+        syncDirs.add(new SyncDir("C:\\Temp\\Sync1-1\\ToSync", "C:\\Temp\\Sync1-2\\ToSync"));
     }
 
     public static void main(String[] args) throws IOException {
@@ -30,10 +29,39 @@ public class App {
     private void start() throws IOException {
         for (SyncDir syncDir : syncDirs) {
             Path path1 = syncDir.getPath1();
-            logger.info("Start Parsing: " + path1);
+            Path path2 = syncDir.getPath2();
+            String path1FileName = path1.getFileName().toString();
+            String path2FileName = path1.getFileName().toString();
+            logger.info("{} <=> {}", path1, path2);
+            logger.info("FileNames: {} & {}", path1FileName, path2FileName);
 
-            parseDirectory(path1);
+            if (!path1FileName.equals(path2FileName)) {
+                logger.error("Sync Folders should be same name: {}, {}", path1, path2);
+                return;
+            }
+            boolean isDir1 = Files.isDirectory(path1);
+            boolean isDir2 = Files.isDirectory(path2);
+            if (!isDir1 || !isDir2) {
+                logger.error("Both Sync Paths should be Directory: {}, {}", path1, path2);
+                return;
+            }
+        }
+    }
 
+    private void diff(Path path1, Path path2) {
+        boolean isExists1 = Files.exists(path1);
+        boolean isExists2 = Files.exists(path2);
+        Path parent1 = path1.getParent();
+        Path parent2 = path2.getParent();
+        Path path1Rel = path1.relativize(parent1);
+        Path path2Rel = path2.relativize(parent2);
+
+        if (isExists1 && isExists2) {
+            logger.info("Both Exists");
+        } else if (isExists1) {
+            logger.info("{} Exists", path1);
+        } else {
+            logger.info("{} Exists", path2);
         }
     }
 
