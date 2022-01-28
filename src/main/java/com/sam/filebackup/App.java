@@ -36,7 +36,7 @@ public class App {
             logger.info("FileNames: {} & {}", path1FileName, path2FileName);
 
             if (!path1FileName.equals(path2FileName)) {
-                logger.error("Sync Folders should be same name: {}, {}", path1, path2);
+                logger.error("Sync Folders should be same names: {}, {}", path1, path2);
                 return;
             }
             boolean isDir1 = Files.isDirectory(path1);
