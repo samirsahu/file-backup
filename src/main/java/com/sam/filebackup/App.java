@@ -1,5 +1,6 @@
 package com.sam.filebackup;
 
+import com.sam.utils.StringUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,6 +23,7 @@ public class App {
     }
 
     public static void main(String[] args) throws IOException {
+        logger.info("App.java: main(): Started. ******************************");
         App me = new App();
         me.start();
     }
@@ -30,25 +32,29 @@ public class App {
         for (SyncDir syncDir : syncDirs) {
             Path path1 = syncDir.getPath1();
             Path path2 = syncDir.getPath2();
-            String path1FileName = path1.getFileName().toString();
-            String path2FileName = path1.getFileName().toString();
-            logger.info("{} <=> {}", path1, path2);
-            logger.info("FileNames: {} & {}", path1FileName, path2FileName);
+            logger.info("Roots: {} <=> {}", path1, path2);
+//            logger.info("FileNames: {} & {}", path1FileName, path2FileName);
 
-            if (!path1FileName.equals(path2FileName)) {
-                logger.error("Sync Folders should be same names: {}, {}", path1, path2);
-                return;
-            }
-            boolean isDir1 = Files.isDirectory(path1);
-            boolean isDir2 = Files.isDirectory(path2);
-            if (!isDir1 || !isDir2) {
-                logger.error("Both Sync Paths should be Directory: {}, {}", path1, path2);
-                return;
-            }
+
+            diff(path1, path2, 0);
         }
     }
 
-    private void diff(Path path1, Path path2) {
+    private void diff(Path path1, Path path2, int level) throws IOException {
+        logger.info("{}Checking {} <=> {}", StringUtil.repeat("\t", level), path1, path2);
+
+        String path1FileName = path1.getFileName().toString();
+        String path2FileName = path1.getFileName().toString();
+        if (!path1FileName.equals(path2FileName)) {
+            logger.error("{}Sync Folders should be same names: {}, {}",StringUtil.repeat("\t", level), path1, path2);
+            return;
+        }
+        boolean isDir1 = Files.isDirectory(path1);
+        boolean isDir2 = Files.isDirectory(path2);
+        if (!isDir1 || !isDir2) {
+            logger.error("{}Both Sync Paths should be Directory: {}, {}",StringUtil.repeat("\t", level), path1, path2);
+            return;
+        }
         boolean isExists1 = Files.exists(path1);
         boolean isExists2 = Files.exists(path2);
         Path parent1 = path1.getParent();
@@ -59,10 +65,17 @@ public class App {
         if (isExists1 && isExists2) {
             logger.info("Both Exists");
         } else if (isExists1) {
-            logger.info("{} Exists", path1);
+            logger.info("Source {} Exists", path1);
         } else {
-            logger.info("{} Exists", path2);
+            logger.info("Target {} Exists", path2);
         }
+        logger.info("Parent1: {}", parent1);
+        logger.info("Parent2: {}", parent2);
+        logger.info("Rel Parent1: {}", path1Rel);
+        logger.info("Rel Parent2: {}", path2Rel);
+
+        DirectoryStream<Path> dir1Stream = Files.newDirectoryStream(path1);
+
     }
 
     private void parseDirectory(Path dirPath) throws IOException {
